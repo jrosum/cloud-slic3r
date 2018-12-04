@@ -1,0 +1,6 @@
+stages:
+  - container_build
+
+BuildHardwareToolchainContainer:
+  stage: container_build
+  script: "sh build_container.sh"
