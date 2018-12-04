@@ -1,7 +1,12 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, abort
 from os import system
 app = Flask(__name__)
 
+def slic3r_command(file):
+    return "slic3r " + file + " --nozzle-diameter 0.4" \
+                                         " --filament-diameter 1.75 " \
+                                         " --temperature 200 " \
+                                         " --bed-temperature 60 && rm *.stl"
 
 @app.route('/')
 def index():
@@ -13,13 +18,19 @@ def upload_file():
     if request.method == 'POST':
         system("rm *.gcode")
         f = request.files['file']
-        f.save(f.filename)
-        system("slic3r " + str(f.filename) + " --nozzle-diameter 0.4 --filament-diameter 1.75 --temperature 200 --bed-temperature 60 && rm *.stl")
-        gcode = str(f.filename).split(".")[0] + ".gcode"
-        try:
-            return send_file(gcode, as_attachment=True)
-        except Exception as e:
-            return "Slic3r was not able to process your file"
+        filename_check = "&&" in f.filename or "|" in f.filename
+
+        if not filename_check :
+            f.save(f.filename)
+            system(slic3r_command(str(f.filename)))
+            gcode = str(f.filename).split(".")[0] + ".gcode"
+
+            try:
+                return send_file(gcode, as_attachment=True)
+            except Exception as e:
+                return abort(500)
+        else:
+            return abort(500)
 
 if __name__ == '__main__':
     app.run("0.0.0.0", 80)
