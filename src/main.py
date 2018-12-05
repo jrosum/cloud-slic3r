@@ -6,8 +6,9 @@ def slic3r_command(file):
     return "slic3r " + file + " --nozzle-diameter 0.4" \
                                          " --filament-diameter 1.75 " \
                                          " --temperature 200 " \
-                                         " --bed-temperature 60 && rm *.stl " \
-                                         " --layer-height 0.1"
+                                         " --bed-temperature 60 " \
+                                         " --layer-height 0.1 && rm *.stl "
+
 
 @app.route('/')
 def index():
