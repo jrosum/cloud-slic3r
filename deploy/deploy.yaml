@@ -1,0 +1,60 @@
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: synyx-intern
+  name: slic3r
+  labels:
+    app: slic3r
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: slic3r
+  template:
+    metadata:
+      labels:
+        app: slic3r
+    spec:
+      imagePullSecrets:
+       - name: slic3r-registry
+      containers:
+       - name: slic3r
+         imagePullPolicy: Always
+         image: container-registry.synyx.de/synyx/slic3r-web:v2
+         ports:
+          - containerPort: 8081
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: synyx-intern
+  name: slic3r
+spec:
+  selector:
+    app: slic3r
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8081
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: synyx-intern
+  name: slic3r
+spec:
+  rules:
+  - host: slic3r.synyx.coffee
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: slic3r
+          servicePort: 80
