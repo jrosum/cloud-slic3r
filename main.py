@@ -6,7 +6,8 @@ def slic3r_command(file):
     return "slic3r " + file + " --nozzle-diameter 0.4" \
                                          " --filament-diameter 1.75 " \
                                          " --temperature 200 " \
-                                         " --bed-temperature 60 && rm *.stl"
+                                         " --bed-temperature 60 && rm *.stl " \
+                                         " --layer-height 0.1"
 
 @app.route('/')
 def index():
@@ -33,4 +34,4 @@ def upload_file():
             return abort(500)
 
 if __name__ == '__main__':
-    app.run("0.0.0.0", 80)
+    app.run("0.0.0.0", 8081)
