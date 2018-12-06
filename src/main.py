@@ -29,7 +29,7 @@ def upload_file():
             f.save(f.filename)
             print slic3r_command(str(f.filename))
             system(slic3r_command(str(f.filename)))
-            gcode = str(f.filename).split(".")[0] + ".gcode"
+            gcode = "../" + str(f.filename).split(".")[0] + ".gcode"
 
             try:
                 print "Sending" + gcode
