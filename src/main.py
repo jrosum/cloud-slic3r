@@ -25,11 +25,14 @@ def upload_file():
         filename_check = "&&" in f.filename or "|" in f.filename
 
         if not filename_check :
+            print "received: " + f.filename
             f.save(f.filename)
+            print slic3r_command(str(f.filename))
             system(slic3r_command(str(f.filename)))
             gcode = str(f.filename).split(".")[0] + ".gcode"
 
             try:
+                print "Sending" + gcode
                 return send_file(gcode, as_attachment=True)
             except Exception as e:
                 return abort(500)
