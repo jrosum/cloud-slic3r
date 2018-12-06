@@ -19,6 +19,12 @@ h2{
   color: #ffffff;
   font-family: Arial;
 }
+.settings{
+  text-align: center;
+  line-height: 50px;
+  color: #ffffff;
+  font-family: Arial;
+}
 form p{
   width: 100%;
   height: 100%;
@@ -27,7 +33,7 @@ form p{
   color: #ffffff;
   font-family: Arial;
 }
-form input{
+.fileSection{
   position: absolute;
   margin: 0;
   padding: 0;

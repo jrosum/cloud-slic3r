@@ -2,15 +2,26 @@ from flask import Flask, render_template, request, send_file, abort
 from os import system
 app = Flask(__name__)
 
-def slic3r_command(file):
-    return "slic3r " + file + \
-                                " --nozzle-diameter 0.4" \
-                                " --filament-diameter 1.75 " \
-                                " --temperature 200 " \
-                                " --bed-temperature 60 " \
-                                " --layer-height 0.1 " \
-                                "&& rm *.stl "
+def slic3r_command(file, height, support):
+    if support == "on":
+        command = "slic3r " + file + \
+                  " --nozzle-diameter 0.4" \
+                  " --filament-diameter 1.75 " \
+                  " --temperature 200 " \
+                  " --bed-temperature 60 " \
+                  " --layer-height " + str(height) + " " \
+                  " --support-material" \
+                  "&& rm *.stl "
+    else:
+        command = "slic3r " + file + \
+                  " --nozzle-diameter 0.4" \
+                  " --filament-diameter 1.75 " \
+                  " --temperature 200 " \
+                  " --bed-temperature 60 " \
+                  " --layer-height " + str(height) + " " \
+                  "&& rm *.stl "
 
+    return command
 
 @app.route('/')
 def index():
@@ -22,13 +33,15 @@ def upload_file():
     if request.method == 'POST':
         system("rm *.gcode")
         f = request.files['file']
+        height = request.form["height"]
+        support = request.form["support"]
         filename_check = "&&" in f.filename or "|" in f.filename
 
         if not filename_check :
             print "received: " + f.filename
             f.save(f.filename)
-            print slic3r_command(str(f.filename))
-            system(slic3r_command(str(f.filename)))
+            print slic3r_command(str(f.filename), height, support)
+            system(slic3r_command(str(f.filename), height, support))
             gcode = "../" + str(f.filename).split(".")[0] + ".gcode"
 
             try:
