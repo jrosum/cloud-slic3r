@@ -35,6 +35,7 @@ def upload_file():
                 print "Sending" + gcode
                 return send_file(gcode, as_attachment=True)
             except Exception as e:
+                print e
                 return abort(500)
         else:
             return abort(500)
