@@ -1,5 +1,5 @@
-$(document).ready(function(){
-  $('form input').change(function () {
-    $('form p').text(this.files.length + " STL ausgewählt");
-  });
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById('stlfile').onchange = function () {
+    document.getElementById('uploadtext').textContent = this.files.length + " STL ausgewählt";
+  };
 });
