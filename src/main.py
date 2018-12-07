@@ -11,7 +11,7 @@ def slic3r_command(file, height, support):
                   " --bed-temperature 60 " \
                   " --layer-height " + str(height) + " " \
                   " --support-material" \
-                  "&& rm *.stl "
+                  " && rm *.stl "
     else:
         command = "slic3r " + file + \
                   " --nozzle-diameter 0.4" \
@@ -19,7 +19,7 @@ def slic3r_command(file, height, support):
                   " --temperature 200 " \
                   " --bed-temperature 60 " \
                   " --layer-height " + str(height) + " " \
-                  "&& rm *.stl "
+                  " && rm *.stl "
 
     return command
 
