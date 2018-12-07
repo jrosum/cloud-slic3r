@@ -33,8 +33,18 @@ def upload_file():
     if request.method == 'POST':
         system("rm *.gcode")
         f = request.files['file']
-        height = request.form["height"]
-        support = request.form["support"]
+        form = request.form
+
+        if "height" in form.keys() or not form["height"] == "":
+            height = form["height"]
+        else:
+            return abort(400)
+
+        if "support" in form.keys():
+            support = request.form["support"]
+        else:
+            support = "off"
+
         filename_check = "&&" in f.filename or "|" in f.filename
 
         if not filename_check :
@@ -54,4 +64,4 @@ def upload_file():
             return abort(500)
 
 if __name__ == '__main__':
-    app.run("0.0.0.0", 8081)
+    app.run("0.0.0.0", 8088, debug=True)
