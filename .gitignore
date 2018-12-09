@@ -1,2 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
+*.stl
+*.o
+*.pov
+src/stl2pov/stl2pov
+*.pyc
+*.png

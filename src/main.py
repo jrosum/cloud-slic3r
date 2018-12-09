@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, send_file, abort
 from os import system
+from Render import Render
+import zipfile
+
 app = Flask(__name__)
+render = Render(system)
+
 
 def slic3r_command(file, height, support):
     if support == "on":
@@ -51,12 +56,16 @@ def upload_file():
             print("received: " + f.filename)
             f.save(f.filename)
             print(slic3r_command(str(f.filename), height, support))
+            render.render_stl(f.filename)
             system(slic3r_command(str(f.filename), height, support))
             gcode = "./" + str(f.filename).split(".")[0] + ".gcode"
 
             try:
                 print("Sending" + gcode)
-                return send_file(gcode, as_attachment=True)
+                zip = zipfile.ZipFile("file.zip", "w")
+                zip.write(gcode)
+                zip.write("./my_model.png")
+                return send_file("./file.zip", as_attachment=True)
             except Exception as e:
                 print(e)
                 return abort(500)
