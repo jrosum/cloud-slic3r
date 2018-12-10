@@ -65,6 +65,7 @@ def upload_file():
                 zip = zipfile.ZipFile("file.zip", "w")
                 zip.write(gcode)
                 zip.write("./my_model.png")
+                zip.close()
                 return send_file("./file.zip", as_attachment=True)
             except Exception as e:
                 print(e)
