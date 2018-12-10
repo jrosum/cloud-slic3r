@@ -2,12 +2,13 @@ from flask import Flask, render_template, request, send_file, abort
 from os import system
 from Render import Render
 import zipfile
+from random import random
 
 app = Flask(__name__)
-render = Render(system)
+render = Render(system, random)
 
 
-def slic3r_command(file, height, support):
+def slic3r_command(file, height, support, gcode_name):
     if support == "on":
         command = "slic3r " + file + \
                   " --nozzle-diameter 0.4" \
@@ -15,7 +16,8 @@ def slic3r_command(file, height, support):
                   " --temperature 200 " \
                   " --bed-temperature 60 " \
                   " --layer-height " + str(height) + " " \
-                  " --support-material" \
+                  " --support-material " \
+                  "--output " + gcode_name + " " \
                   " && rm *.stl "
     else:
         command = "slic3r " + file + \
@@ -24,6 +26,7 @@ def slic3r_command(file, height, support):
                   " --temperature 200 " \
                   " --bed-temperature 60 " \
                   " --layer-height " + str(height) + " " \
+                  "--output " + gcode_name + " " \
                   " && rm *.stl "
 
     return command
@@ -55,18 +58,19 @@ def upload_file():
         if not filename_check :
             print("received: " + f.filename)
             f.save(f.filename)
-            print(slic3r_command(str(f.filename), height, support))
-            render.render_stl(f.filename)
-            system(slic3r_command(str(f.filename), height, support))
-            gcode = "./" + str(f.filename).split(".")[0] + ".gcode"
+            image_name = render.render_stl(f.filename)
+            gcode = "./" + str(f.filename).split(".")[0] + str(random()) +".gcode"
+            print(slic3r_command(str(f.filename), height, support, gcode))
+            system(slic3r_command(str(f.filename), height, support, gcode))
 
             try:
+                zip_name = "./" + str(f.filename).split(".")[0]+ str(random()) + ".zip"
                 print("Sending" + gcode)
-                zip = zipfile.ZipFile("file.zip", "w")
+                zip = zipfile.ZipFile(zip_name, "w")
                 zip.write(gcode)
-                zip.write("./my_model.png")
+                zip.write("./" + image_name)
                 zip.close()
-                return send_file("./file.zip", as_attachment=True)
+                return send_file(zip_name, as_attachment=True)
             except Exception as e:
                 print(e)
                 return abort(500)
