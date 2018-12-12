@@ -3,9 +3,10 @@ from os import system
 from Render import Render
 import zipfile
 from random import random
+from stltools import stl, utils
 
 app = Flask(__name__)
-render = Render(system, random)
+render = Render(system, random, stl, utils)
 
 
 def slic3r_command(file, height, support, gcode_name):
