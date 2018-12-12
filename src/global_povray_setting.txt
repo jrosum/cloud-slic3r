@@ -1,0 +1,6 @@
+global_settings { ambient_light rgb<1, 1, 1> }
+camera {
+  location <52.5, 52.5, 52.5>
+  look_at <14.5, 14.25, 17.5>
+}
+light_source { <43.5, 42.75, 52.5> color rgb<1, 1, 1> }
