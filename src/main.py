@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, send_file, abort
-from os import system
+from os import system, makedirs
 from Render import Render
 import zipfile
 from random import random
@@ -39,9 +39,11 @@ def index():
 
 @app.route('/uploader', methods=['POST'])
 def upload_file():
-    system("rm *.gcode")
+    folder_name = "./temp/" +str(int(random() * 1000)) + "/"
+    makedirs(folder_name)
     f = request.files['file']
     form = request.form
+    input_file_name = "input.stl"
 
     if "height" in form.keys() or not form["height"] == "":
         height = form["height"]
@@ -57,18 +59,17 @@ def upload_file():
 
     if not filename_check :
         print("received: " + f.filename)
-        f.save(f.filename)
-        image_name = render.render_stl(f.filename)
-        gcode = "./" + str(f.filename).split(".")[0] + str(random()) +".gcode"
-        print(slic3r_command(str(f.filename), height, support, gcode))
-        system(slic3r_command(str(f.filename), height, support, gcode))
+        f.save(folder_name + input_file_name)
+        image_name = render.render_stl(folder_name, input_file_name)
+        gcode = folder_name + str(f.filename).split(".")[0] +".gcode"
+        system(slic3r_command(folder_name + input_file_name, height, support, gcode))
 
         try:
-            zip_name = "./" + str(f.filename).split(".")[0]+ str(random()) + ".zip"
+            zip_name = folder_name + str(f.filename).split(".")[0] + ".zip"
             print("Sending" + gcode)
             zip = zipfile.ZipFile(zip_name, "w")
             zip.write(gcode)
-            zip.write("./" + image_name)
+            zip.write(folder_name + image_name)
             zip.close()
             return send_file(zip_name, as_attachment=True)
         except Exception as e:
@@ -78,4 +79,6 @@ def upload_file():
         return abort(500)
 
 if __name__ == '__main__':
+
+    makedirs("./temp", exist_ok=True)
     app.run("0.0.0.0", 8088, debug=True)
