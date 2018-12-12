@@ -9,18 +9,10 @@ class Render:
         print("render class loaded")
 
     def mesh1(self, vertices):
-        """
-        Create a POV-ray mesh description from vertices data.
-        Arguments:
-            name: The name of the object.
-            vertices: An (N,3) numpy array containing the vertex data.
-        Returns:
-            A string representation of a POV-ray mesh object.
-        """
+
         facets = vertices.reshape((-1, 9))
         lines = ["mesh {"]
-        # The indices sequence 1, 0, 2 is used because of the difference between
-        # the STL coordinate system and that used in POV-ray.
+
         fct = "  triangle {{\n    <{1}, {0}, {2}>,\n    <{4}, {3}, {5}>,\n" \
               "    <{7}, {6}, {8}>\n  }}"
         lines += [fct.format(*f) for f in facets]
