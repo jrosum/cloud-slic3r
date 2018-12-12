@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 
 RUN apt-get update
-RUN apt-get install -y slic3r python3 python3-pip povray g++ make
+RUN apt-get install -y slic3r python3 python3-pip povray g++ make git
 
 COPY src/ /src/
 RUN pip3 install -r /src/requirements.txt
