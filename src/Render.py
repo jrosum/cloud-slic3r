@@ -36,12 +36,14 @@ class Render:
 
 
 
-    def render_stl(self, filename):
+    def render_stl(self, folder_name, filename):
 
-        pov_file = str(self.random()) + ".pov"
-        png_name = "preview_" + str(self.random()) + ".png"
-        self.__stl_to_pov(filename, pov_file)
-        render_command = "povray  -i\"" + pov_file + "\" +FN +W1920 +H1080 -o\"" + png_name + "\" +Q9 +AM1 +A +UA"
+        pov_file = folder_name + "input.pov"
+        png_name = "preview.png"
+        png_path = folder_name + png_name
+
+        self.__stl_to_pov(folder_name + filename, pov_file)
+        render_command = "povray  -i\"" + pov_file + "\" +FN +W1920 +H1080 -o\"" + png_path + "\" +Q9 +AM1 +A +UA"
         self.system(render_command)
         return png_name
 
