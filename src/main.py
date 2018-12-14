@@ -4,9 +4,11 @@ from Render import Render
 import zipfile
 from random import random
 from stltools import stl, utils
+import stl as stl_numpy
+from stl import mesh
 
 app = Flask(__name__)
-render = Render(system, random, stl, utils)
+render = Render(system, random, stl, utils, mesh, stl_numpy)
 
 
 def slic3r_command(file, height, support, gcode_name):
