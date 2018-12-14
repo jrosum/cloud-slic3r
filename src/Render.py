@@ -97,7 +97,7 @@ class Render:
         png_path = folder_name + png_name
 
         self.__stl_to_pov(folder_name + filename, pov_file)
-        render_command = "povray  -i\"" + pov_file + "\" +FN +W3200 +H1800 -o\"" + png_path + "\" +Q9 +AM1 +A +UA"
+        render_command = "povray  -i\"" + pov_file + "\" +FN +W1920 +H1200 -o\"" + png_path + "\" +Q9 +AM1 +A +UA"
         self.system(render_command)
         return png_name
 
