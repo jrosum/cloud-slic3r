@@ -50,6 +50,7 @@ class Render:
 
         lines = ["  camera {"]
         lines += ["    location <" + location_const + ", " + location_const + ", " + location_const + ">"]
+        lines += ["up z sky z"]
         lines += ["look_at <" + look_at_x + ", " + look_at_y + ", " + look_at_z + ">"]
         lines += ["}"]
         lines += ["  light_source { <" + light_x + ", " + light_y + ", " + light_z + "> color rgb<1, 1, 1> }"]
@@ -66,8 +67,8 @@ class Render:
               "    <{7}, {6}, {8}>\n  }}"
         lines += [fct.format(*f) for f in facets]
         lines += ["texture {"]
-        lines += ["pigment { color rgb<0.9, 0.9, 0.9> }"]
-        lines += ["finish { ambient 0.2 diffuse 0.7 }"]
+        lines += ["pigment { color rgb<0, 1, 0> }"]
+        lines += ["finish { phong 1.0 reflection{0.2} }"]
         lines += ['}']
         lines += ['}']
         return '\n'.join(lines)
@@ -78,8 +79,11 @@ class Render:
         file.write(self.mesh1(vertices))
 
         world = self.get_world(filename)
-
         file.write(world)
+
+        plain_file = open("./plain.pov", "r")
+        file.write(plain_file.read())
+
         file.close()
 
 
