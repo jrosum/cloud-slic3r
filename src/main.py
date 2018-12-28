@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_file, abort
-from os import system, makedirs
+from os import system, makedirs, chdir
 from Render import Render
+from glob import glob
 import zipfile
 from random import random
 from stltools import stl, utils
@@ -41,7 +42,8 @@ def index():
 
 @app.route('/uploader', methods=['POST'])
 def upload_file():
-    folder_name = "./temp/" +str(int(random() * 1000)) + "/"
+    folder_id = str(int(random() * 1000))
+    folder_name = "./temp/{}/".format(folder_id)
     makedirs(folder_name)
     f = request.files['file']
     form = request.form
@@ -73,12 +75,34 @@ def upload_file():
             zip.write(gcode)
             zip.write(folder_name + image_name)
             zip.close()
-            return send_file(zip_name, as_attachment=True)
+            return folder_id
         except Exception as e:
             print(e)
             return abort(500)
     else:
         return abort(500)
+
+
+def get_zip_file_path(folder_id):
+    path = "./temp/{}".format(folder_id)
+    chdir(path)
+    zip_file_name = glob("*.zip")[0]
+    return "{}/{}".format(path, zip_file_name)
+
+@app.route('/download/<folder_id>', methods=['GET'])
+def download_zip(folder_id):
+    try:
+        int(folder_id)
+        try:
+            path = get_zip_file_path(folder_id)
+            print("Try to download {}".format(path))
+            return send_file(path, as_attachment=True)
+        except Exception as e:
+            print(e)
+            return abort(404)
+    except:
+        return abort(400)
+
 
 if __name__ == '__main__':
 
