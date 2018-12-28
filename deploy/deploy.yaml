@@ -23,7 +23,7 @@ spec:
       containers:
        - name: slic3r
          imagePullPolicy: Always
-         image: container-registry.synyx.de/synyx/slic3r-web:v2
+         image: container-registry.synyx.de/synyx/slic3r-web:reichsflugscheibe
          ports:
           - containerPort: 8081
 
@@ -40,7 +40,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8081
+    targetPort: 8088
 
 ---
 
