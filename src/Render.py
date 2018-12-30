@@ -68,7 +68,7 @@ class Render:
         lines += [fct.format(*f) for f in facets]
         lines += ["texture {"]
         lines += ["pigment { color rgb<0, 1, 0> }"]
-        lines += ["finish { phong 1.0 reflection{0.2} }"]
+        lines += ["finish { phong 1.0 reflection{0.02} }"]
         lines += ['}']
         lines += ['}']
         return '\n'.join(lines)
@@ -97,7 +97,7 @@ class Render:
         png_path = folder_name + png_name
 
         self.__stl_to_pov(folder_name + filename, pov_file)
-        render_command = "povray  -i\"" + pov_file + "\" +FN +W4096 +H2160 -o\"" + png_path + "\" -D +Q9 +AM1 +A +UA"
+        render_command = "povray  -i\"" + pov_file + "\" +FN +W1280 +H1024 -o\"" + png_path + "\" -D +Q9 +AM1 +A +UA"
         self.system(render_command)
         return png_name
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, abort
+from flask import Flask, render_template, request, send_file, abort, send_from_directory
 from os import system, makedirs, chdir
 from Render import Render
 from glob import glob
@@ -75,7 +75,7 @@ def upload_file():
             zip.write(gcode)
             zip.write(folder_name + image_name)
             zip.close()
-            return folder_id
+            return render_template("uploader.html", temp_folder = folder_id)
         except Exception as e:
             print(e)
             return abort(500)
@@ -88,6 +88,11 @@ def get_zip_file_path(folder_id):
     chdir(path)
     zip_file_name = glob("*.zip")[0]
     return "{}/{}".format(path, zip_file_name)
+
+@app.route('/vorschau/<folder_id>/preview.png', methods=['GET'])
+def get_png_file(folder_id):
+    path = "./temp/{}".format(folder_id)
+    return send_from_directory(path, "preview.png")
 
 @app.route('/download/<folder_id>', methods=['GET'])
 def download_zip(folder_id):
