@@ -7,9 +7,11 @@ from random import random
 from stltools import stl, utils
 import stl as stl_numpy
 from stl import mesh
+from RepairStl import RepairStl
 
 app = Flask(__name__)
 render = Render(system, random, stl, utils, mesh, stl_numpy)
+repair_stl = RepairStl(system)
 
 
 def slic3r_command(file, height, support, gcode_name):
@@ -64,6 +66,7 @@ def upload_file():
     if not filename_check :
         print("received: " + f.filename)
         f.save(folder_name + input_file_name)
+        repair_stl.repair_and_save_ascii(folder_name, input_file_name)
         image_name = render.render_stl(folder_name, input_file_name)
         gcode = folder_name + str(f.filename).split(".")[0] +".gcode"
         system(slic3r_command(folder_name + input_file_name, height, support, gcode))
