@@ -6,7 +6,7 @@
    <body>
       <h2>GCode Generator for Anycubic i3 !!!</h2>
       <form action = "/uploader" method = "POST"
-         enctype = "multipart/form-data">
+         enctype = "multipart/form-data" id="slicerForm">
          <div class="settings">
             Schichtdicke :
             <input type="text" value="0.2" name="height" id="height">
@@ -15,7 +15,6 @@
             <input type = "file" name = "file" id = "stlfile"/>
          </div>
          <p id="uploadtext">Lege deine STL-Dateien hier ab!!</p>
-         <button type="submit">Download G-Code</button>
       </form>
       <script src="{{ url_for('static', filename='scripts.js') }}"></script>
    </body>

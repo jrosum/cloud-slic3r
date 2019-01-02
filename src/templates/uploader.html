@@ -1,0 +1,14 @@
+<html>
+   <head>
+      <title>GCode Generator</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+   </head>
+   <body>
+      <h2>GCode Generator for Anycubic i3 !!!</h2>
+      <div class="preview">
+         <img src="/vorschau/{{ temp_folder }}/preview.png" alt="Vorschau" width="1024" height="768">
+         <input class="DownloadButton" type="button" value="Download GCode" onclick="window.location.href='/download/{{ temp_folder }}'">
+      </div>
+
+   </body>
+</html>
