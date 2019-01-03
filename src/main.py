@@ -96,12 +96,14 @@ def get_zip_file_path(folder_id):
     path = "./temp/{}".format(folder_id)
     chdir(path)
     zip_file_name = glob("*.zip")[0]
+    chdir("../..")
     return "{}/{}".format(path, zip_file_name)
 
 def get_gcode_file_path(folder_id):
     path = "./temp/{}".format(folder_id)
     chdir(path)
     gcode_file_name = glob("*.gcode")[0]
+    chdir("../..")
     return "{}/{}".format(path, gcode_file_name)
 
 @app.route('/vorschau/<folder_id>/preview.png', methods=['GET'])
@@ -123,7 +125,6 @@ def download_zip(folder_id):
             return abort(404)
     except:
         return abort(400)
-
 
 if __name__ == '__main__':
 
