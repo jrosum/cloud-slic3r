@@ -8,11 +8,17 @@ from stltools import stl, utils
 import stl as stl_numpy
 from stl import mesh
 from RepairStl import RepairStl
+from SendToPrinter import SendToPrinter
 
 app = Flask(__name__)
 render = Render(system, random, stl, utils, mesh, stl_numpy)
 repair_stl = RepairStl(system)
 
+api_key = "1f203e90-10c9-4e1a-ab1b-40f43c220f43"
+host = "druckerei.synyx.coffee"
+printer_name = "Prusa_i3"
+
+send_to_printer = SendToPrinter(system, host, printer_name, api_key)
 
 def slic3r_command(file, height, support, gcode_name):
     if support == "on":
@@ -90,7 +96,15 @@ def get_zip_file_path(folder_id):
     path = "./temp/{}".format(folder_id)
     chdir(path)
     zip_file_name = glob("*.zip")[0]
+    chdir("../..")
     return "{}/{}".format(path, zip_file_name)
+
+def get_gcode_file_path(folder_id):
+    path = "./temp/{}".format(folder_id)
+    chdir(path)
+    gcode_file_name = glob("*.gcode")[0]
+    chdir("../..")
+    return "{}/{}".format(path, gcode_file_name)
 
 @app.route('/vorschau/<folder_id>/preview.png', methods=['GET'])
 def get_png_file(folder_id):
@@ -102,6 +116,7 @@ def download_zip(folder_id):
     try:
         int(folder_id)
         try:
+            send_to_printer.upload(get_gcode_file_path(folder_id))
             path = get_zip_file_path(folder_id)
             print("Try to download {}".format(path))
             return send_file(path, as_attachment=True)
@@ -110,7 +125,6 @@ def download_zip(folder_id):
             return abort(404)
     except:
         return abort(400)
-
 
 if __name__ == '__main__':
 

@@ -1,7 +1,7 @@
 FROM python:3.7.1-stretch
 
 RUN apt-get update
-RUN apt-get install -y slic3r povray git admesh
+RUN apt-get install -y slic3r povray git admesh curl
 
 COPY src/ /src/
 RUN pip3 install -r /src/requirements.txt
