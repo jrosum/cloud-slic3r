@@ -74,7 +74,7 @@ class Render:
         return '\n'.join(lines)
 
     def __stl_to_pov(self , filename, pov_file):
-        vertices, name = self.stl.readstl(filename, "utf-8")
+        vertices, name = self.stl.readstl(filename)
         file = open(pov_file, 'w+')
         file.write(self.mesh1(vertices))
 
@@ -100,8 +100,3 @@ class Render:
         render_command = "povray  -i\"" + pov_file + "\" +FN +W1280 +H1024 -o\"" + png_path + "\" -D +Q9 +AM1 +A +UA"
         self.system(render_command)
         return png_name
-
-
-
-
-
