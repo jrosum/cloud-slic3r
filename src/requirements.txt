@@ -5,4 +5,4 @@ Werkzeug==0.9.6
 itsdangerous==0.24
 -e git://github.com/rsmith-nl/stltools.git#5.0#egg=stltools
 numpy-stl==2.8.0
-gunicorn
+gunicorn==19.9.0
