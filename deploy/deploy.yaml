@@ -9,7 +9,7 @@ metadata:
   labels:
     app: slic3r
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: slic3r
@@ -23,7 +23,7 @@ spec:
       containers:
        - name: slic3r
          imagePullPolicy: Always
-         image: container-registry.synyx.de/synyx/slic3r-web:reichsflugscheibe
+         image: container-registry.synyx.de/synyx/slic3r-web:v10
          ports:
           - containerPort: 8081
 
