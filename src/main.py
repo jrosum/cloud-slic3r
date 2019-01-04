@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, abort, send_from_directory
+from flask import Flask, render_template, request, send_file, abort, send_from_directory, redirect
 from os import system, makedirs, chdir
 from Render import Render
 from glob import glob
@@ -9,6 +9,12 @@ import stl as stl_numpy
 from stl import mesh
 from RepairStl import RepairStl
 from SendToPrinter import SendToPrinter
+from requests import post
+from requests_toolbelt.multipart.encoder import MultipartEncoder
+from os import path
+from time import sleep
+
+import json
 
 app = Flask(__name__)
 render = Render(system, random, stl, utils, mesh, stl_numpy)
@@ -18,7 +24,7 @@ api_key = "1f203e90-10c9-4e1a-ab1b-40f43c220f43"
 host = "druckerei.synyx.coffee"
 printer_name = "Prusa_i3"
 
-send_to_printer = SendToPrinter(system, host, printer_name, api_key)
+printer_client = SendToPrinter(system, host, printer_name, api_key, post, MultipartEncoder, path)
 
 def slic3r_command(file, height, support, gcode_name):
     if support == "on":
@@ -116,10 +122,24 @@ def download_zip(folder_id):
     try:
         int(folder_id)
         try:
-            send_to_printer.upload(get_gcode_file_path(folder_id))
             path = get_zip_file_path(folder_id)
             print("Try to download {}".format(path))
             return send_file(path, as_attachment=True)
+        except Exception as e:
+            print(e)
+            return abort(404)
+    except:
+        return abort(400)
+
+@app.route('/sendToPrinter/<folder_id>', methods=['GET'])
+def send_to_printer(folder_id):
+    try:
+        int(folder_id)
+        try:
+            model_id = printer_client.upload(get_gcode_file_path(folder_id))
+            url = "http://{}:3344/#!/printer/{}/preview/{}/2".format(host, printer_name, model_id)
+            sleep(1)
+            return redirect(url, code=302)
         except Exception as e:
             print(e)
             return abort(404)
