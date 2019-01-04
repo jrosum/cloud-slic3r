@@ -1,10 +1,9 @@
 class SendToPrinter:
 
-    def __init__(self, system, host, printer_name, api_key, post, MultipartEncoder, path):
+    def __init__(self, host, printer_name, api_key, post, MultipartEncoder, path):
         self.printer_name = printer_name
         self.host = host
         self.api_key = api_key
-        self.system = system
         self.post = post
         self.MultipartEncoder = MultipartEncoder
         self.path = path

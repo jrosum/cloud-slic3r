@@ -24,7 +24,7 @@ api_key = "1f203e90-10c9-4e1a-ab1b-40f43c220f43"
 host = "druckerei.synyx.coffee"
 printer_name = "Prusa_i3"
 
-printer_client = SendToPrinter(system, host, printer_name, api_key, post, MultipartEncoder, path)
+printer_client = SendToPrinter(host, printer_name, api_key, post, MultipartEncoder, path)
 
 def slic3r_command(file, height, support, gcode_name):
     if support == "on":
