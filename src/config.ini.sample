@@ -1,0 +1,4 @@
+[print_server]
+printer_name = Prusa_i3
+host = druckerei.sample
+api_key = 1f203e3480-10c9-4e1a-ab1b-jdg3w095409328

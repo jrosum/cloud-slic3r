@@ -14,6 +14,7 @@ from requests import post
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from os import path
 from time import sleep
+import configparser
 
 
 app = Flask(__name__)
@@ -21,9 +22,15 @@ render = Render(system, random, stl, utils, mesh, stl_numpy)
 repair_stl = RepairStl(system)
 stl_rotate = StlRotator()
 
-api_key = "1f203e90-10c9-4e1a-ab1b-40f43c220f43"
-host = "druckerei.synyx.coffee"
-printer_name = "Prusa_i3"
+config = configparser.ConfigParser()
+config.sections()
+config.read('config.ini')
+config.sections()
+
+
+api_key = config['print_server']['api_key']
+host = config['print_server']['host']
+printer_name = config['print_server']['printer_name']
 
 printer_client = SendToPrinter(host, printer_name, api_key, post, MultipartEncoder, path)
 
