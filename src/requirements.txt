@@ -4,6 +4,7 @@ MarkupSafe==0.23
 Werkzeug==0.9.6
 itsdangerous==0.24
 -e git://github.com/rsmith-nl/stltools.git@5.0#egg=stltools
+-e git+https://gitlab.janrosum.com/root/stlteak.git@1.0.1#egg=stltweak
 numpy-stl==2.8.0
 gunicorn==19.9.0
 requests==2.21.0
