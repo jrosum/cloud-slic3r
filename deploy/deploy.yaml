@@ -24,6 +24,7 @@ spec:
        - name: slic3r
          imagePullPolicy: Always
          image: container-registry.synyx.de/synyx/slic3r-web:v10
+
          ports:
           - containerPort: 8081
 
