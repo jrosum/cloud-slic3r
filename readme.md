@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/jrosum/cloud-slic3r.svg?branch=master)](https://travis-ci.org/jrosum/cloud-slic3r)
 # slic3r web frontend
 
 web frontend based on [Slic3r](https://slic3r.org/), the open source 3D printing toolbox.
