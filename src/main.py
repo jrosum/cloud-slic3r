@@ -9,16 +9,17 @@ import stl as stl_numpy
 from stl import mesh
 from RepairStl import RepairStl
 from SendToPrinter import SendToPrinter
+from StlRotator import StlRotator
 from requests import post
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from os import path
 from time import sleep
 
-import json
 
 app = Flask(__name__)
 render = Render(system, random, stl, utils, mesh, stl_numpy)
 repair_stl = RepairStl(system)
+stl_rotate = StlRotator()
 
 api_key = "1f203e90-10c9-4e1a-ab1b-40f43c220f43"
 host = "druckerei.synyx.coffee"
@@ -61,7 +62,8 @@ def upload_file():
     makedirs(folder_name)
     f = request.files['file']
     form = request.form
-    input_file_name = "input.stl"
+    input_file_name = "input_twaked.stl"
+    input_file_raw = "input.stl"
 
     if "height" in form.keys() or not form["height"] == "":
         height = form["height"]
@@ -77,7 +79,8 @@ def upload_file():
 
     if not filename_check :
         print("received: " + f.filename)
-        f.save(folder_name + input_file_name)
+        f.save(folder_name + input_file_raw)
+        stl_rotate.rotate(folder_name + input_file_raw, folder_name + input_file_name, False)
         repair_stl.repair_and_save_ascii(folder_name, input_file_name)
         image_name = render.render_stl(folder_name, input_file_name)
         gcode = folder_name + str(f.filename).split(".")[0] +".gcode"
