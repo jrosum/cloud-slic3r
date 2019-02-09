@@ -24,7 +24,7 @@ stl_rotate = StlRotator()
 
 config = configparser.ConfigParser()
 config.sections()
-config.read('config.ini')
+config.read(['/etc/cloud-slic3r/config.ini', 'config.ini'])
 config.sections()
 
 
